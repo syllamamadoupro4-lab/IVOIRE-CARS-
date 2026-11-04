@@ -52,7 +52,7 @@ header .wrap{display:flex;align-items:center;justify-content:space-between;heigh
 .hero p.lead{margin:16px 0 26px;color:var(--muted);max-width:34em;font-size:1.1rem}
 @keyframes heroIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @media (prefers-reduced-motion:reduce){.hero .wrap{animation:none}}
-.card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--green);border-radius:16px;padding:20px;box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--orange);border-radius:16px;padding:20px;box-shadow:0 14px 34px rgba(0,0,0,.4)}
 .tabs{display:flex;gap:8px;margin-bottom:16px}
 .tab{flex:1;border:2px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;padding:11px;font:inherit;font-weight:700;cursor:pointer}
 .tab[aria-pressed="true"]{background:transparent;border-color:var(--line);color:var(--ink)}
@@ -64,7 +64,7 @@ form .btn{width:100%;margin-top:18px}
 
 .steps{display:grid;gap:14px;margin-top:20px;counter-reset:s;padding:0;list-style:none}
 .steps li{counter-increment:s;display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
-.steps li::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;background:var(--green);color:#ffffff;font-weight:800;display:grid;place-items:center}
+.steps li::before{content:counter(s);flex:none;width:34px;height:34px;border-radius:50%;background:var(--orange);color:#ffffff;font-weight:800;display:grid;place-items:center}
 .steps b{display:block}
 .steps span{color:var(--muted)}
 
@@ -94,15 +94,16 @@ form .btn{width:100%;margin-top:18px}
 .trust{background:var(--soft)}
 .trust ul{padding:0;margin:16px 0 0;list-style:none;display:grid;gap:12px}
 .trust li{padding-left:28px;position:relative}
-.trust li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:900}
+.trust li::before{content:"✓";position:absolute;left:0;color:var(--orange);font-weight:900}
 
-footer{padding:28px 0 90px;background:#0a0a0c;color:#ffffff;font-size:.92rem;border-top:1px solid var(--line)}
+footer{padding:28px 0 90px;background:#0a0a0c;color:#ffffff;font-size:.92rem;border-top:6px solid var(--orange)}
 
 .nav{display:flex;align-items:center;gap:16px}
 .nav .lnk{font-weight:700;text-decoration:none}
 .agency{display:none;background:#0a0a0c;color:#ffffff}
 .agency h2,.agency label,.agency p,.agency .note,.agency li{color:#ffffff}
 .agency .sub,.agency .note{color:#bbbbbb}
+.agency .ph-tile,.agency .ph-tile span{color:#555555}
 body.agences .agency{display:block;min-height:70vh}
 body.agences main > section:not(.agency){display:none}
 #aide{display:none}
@@ -117,7 +118,7 @@ body.reserver main > section:not(#reserver){display:none}
 .agency ul{padding:0;margin:0 0 24px;list-style:none;display:grid;gap:12px}
 .agency li{padding-left:28px;position:relative}
 .agency li::before{content:"✓";position:absolute;left:0;font-weight:900}
-.agency .card{color:var(--ink);border-top-color:var(--green)}
+.agency .card{color:var(--ink);border-top-color:var(--orange)}
 .agency .btn-white{background:#ffffff;color:#111111}
 .actions{display:flex;flex-wrap:wrap;gap:10px}
 .btn-ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
@@ -281,7 +282,7 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
         <input id="sname" type="text" placeholder="Ex. Kouassi" required>
         <label for="sphone">Votre numéro personnel</label>
         <input id="sphone" type="tel" placeholder="Ex. 07 00 00 00 00" required>
-        <label for="swhats">Votre numéro WhatsApp</label>
+        <label for="swhats">Votre numéro WhatsApp (pour vous recontacter)</label>
         <input id="swhats" type="tel" placeholder="Ex. 07 00 00 00 00" required>
         <label for="semail">Votre email (Gmail)</label>
         <input id="semail" type="email" placeholder="Ex. kouassi@gmail.com" required>
@@ -351,8 +352,6 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
         <input id="pcar" type="text" placeholder="Ex. Toyota Corolla 2018">
         <label for="pphone">Votre téléphone</label>
         <input id="pphone" type="tel" placeholder="Ex. 07 00 00 00 00" required>
-        <label for="pwhats">Votre numéro WhatsApp (pour vous recontacter)</label>
-        <input id="pwhats" type="tel" placeholder="Ex. 07 00 00 00 00" required>
         <label for="pemail">Votre email (Gmail)</label>
         <input id="pemail" type="email" placeholder="Ex. kouassi@gmail.com" required>
         <label for="pmode">Vous voulez</label>
@@ -547,7 +546,7 @@ document.getElementById("partner").addEventListener("submit", function(e){
     f.appendChild(h("p", {class:"msg-ok", role:"status"}, ["Ajoutez les 4 photos de la voiture pour continuer."]));
     return;
   }
-  send(f, "proprietaire", val("pname"), val("pphone"), val("pmode") + " : " + (val("pcar") || "voiture non précisée") + " – WhatsApp : " + val("pwhats") + " – Email : " + val("pemail"), photos).then(function(){
+  send(f, "proprietaire", val("pname"), val("pphone"), val("pmode") + " : " + (val("pcar") || "voiture non précisée") + " – Email : " + val("pemail"), photos).then(function(){
     pPhotos = [null, null, null, null];
     document.querySelectorAll("#partner img[id^=pimg]").forEach(function(im){ im.hidden = true; im.removeAttribute("src"); });
   });
@@ -592,12 +591,18 @@ function carTopParts(c, badge){
   var imgs = c.i || [], idx = 0;
   var img = h("img", {src:imgs[0], alt:c.n, loading:"lazy", style:"cursor:pointer"});
   var counter = h("span", {style:"position:absolute;right:10px;bottom:10px;background:rgba(0,0,0,.65);color:#ffffff;padding:4px 10px;border-radius:999px;font-size:.8rem;font-weight:700;pointer-events:none"}, ["1 / " + imgs.length]);
-  img.addEventListener("click", function(){
-    idx = (idx + 1) % imgs.length;
+  function show(n){
+    idx = (n + imgs.length) % imgs.length;
     img.src = imgs[idx];
     counter.textContent = (idx + 1) + " / " + imgs.length;
-  });
-  return imgs.length > 1 ? [img, badge, counter] : [img, badge];
+  }
+  img.addEventListener("click", function(){ show(idx + 1); });
+  var btnStyle = "position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(0,0,0,.6);color:#ffffff;font-size:1.6rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center";
+  var prev = h("button", {type:"button", "aria-label":"Photo précédente", style:btnStyle + ";left:8px"}, ["‹"]);
+  var next = h("button", {type:"button", "aria-label":"Photo suivante", style:btnStyle + ";right:8px"}, ["›"]);
+  prev.addEventListener("click", function(e){ e.stopPropagation(); show(idx - 1); });
+  next.addEventListener("click", function(e){ e.stopPropagation(); show(idx + 1); });
+  return imgs.length > 1 ? [img, badge, counter, prev, next] : [img, badge];
 }
 function render(f){
   curF = f; list.innerHTML = "";
