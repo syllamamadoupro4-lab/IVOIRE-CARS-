@@ -19,6 +19,8 @@
   color-scheme:light;
 }
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+/* Pas de zoom au double toucher sur les publications, boutons et liens (téléphone) */
+html,body,a,button,label,input,select,textarea,.car,.car *,.card,.card *{touch-action:manipulation}
 *,*::before,*::after{box-sizing:inherit}
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
 h1,h2,h3{font-family:"Space Grotesk",system-ui,sans-serif;line-height:1.1;margin:0;font-weight:700;letter-spacing:-.01em}
@@ -73,7 +75,11 @@ form .btn{width:100%;margin-top:18px}
 .chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--green);color:#ffffff;border-color:var(--green)}
-.grid{display:grid;gap:14px;grid-template-columns:1fr}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+#cars .car .body{padding:10px 11px 12px}
+#cars .car h3{font-size:.98rem;line-height:1.25}
+#cars .car .meta{font-size:.88rem}
+#cars .car .btn{font-size:.9rem;padding:10px 12px}
 .car{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s ease,box-shadow .15s ease}
 .car:hover{border-color:var(--orange);box-shadow:0 10px 24px rgba(0,0,0,.4)}
 .car .top{height:84px;background:linear-gradient(135deg,var(--surface),var(--soft));display:flex;align-items:flex-end;padding:12px 16px}
@@ -104,6 +110,15 @@ footer{padding:28px 0 90px;background:#0a0a0c;color:#ffffff;font-size:.92rem;bor
 .agency{display:none;background:#0a0a0c;color:#ffffff}
 .agency h2,.agency label,.agency p,.agency .note,.agency li{color:#ffffff}
 .agency .sub,.agency .note{color:#bbbbbb}
+/* Formulaires de connexion : carte blanche lisible partout */
+.auth-card{background:#ffffff;color:#111111;border-radius:18px;border-top:5px solid var(--orange);padding:24px 20px;box-shadow:0 14px 34px rgba(0,0,0,.35);margin-top:12px}
+.auth-card h2{color:#111111;margin:0 0 4px;font-size:1.4rem}
+.auth-card p.note{color:#555555;margin:0 0 8px}
+.auth-card label{color:#111111;margin:16px 0 6px;font-size:.95rem}
+.auth-card input{width:100%;padding:14px 16px;border:1.5px solid #cfcfcf;border-radius:12px;font-size:16px;background:#ffffff;color:#111111;-webkit-text-fill-color:#111111}
+.auth-card input:focus{outline:none;border-color:var(--orange)}
+.auth-card .btn{width:100%;margin-top:20px;padding:16px}
+.auth-card .forgot-link{color:#555555}
 .agency .ph-tile,.agency .ph-tile span{color:#555555}
 body.agences .agency{display:block;min-height:70vh}
 body.agences main > section:not(.agency){display:none}
@@ -128,8 +143,8 @@ body.reserver main > section:not(#reserver){display:none}
 details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 summary{font-weight:700;cursor:pointer}
 details p{margin-top:8px;color:var(--muted)}
-.car .top.has-img{position:relative;height:170px;padding:0}
-.car .top.has-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#111111}
+.car .top.has-img{position:relative;height:170px;padding:0;background:transparent}
+.car .top.has-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent}
 .car .top.has-img .badge{position:absolute;left:12px;bottom:12px}
 .chat-log{height:300px;overflow-y:auto;background:var(--soft);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .bub{max-width:82%;padding:9px 13px;border-radius:14px;font-size:.95rem;word-break:break-word}
@@ -174,13 +189,14 @@ body.vehicule main > section:not(#vehicule){display:none}
 .vc-conv{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
 .vc-top{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line)}
 .vc-top .vc-back{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:10px;font:inherit;font-weight:700;padding:8px 12px;cursor:pointer;color:var(--ink)}
-.vc-top .vc-info b{font-size:1.02rem}
-.vc-price{flex:none;margin-left:auto;font-weight:800;white-space:nowrap}
+.vc-top .vc-info{flex:1 1 0;min-width:0;line-height:1.3}
+.vc-top .vc-info b{font-size:1.02rem;display:block;overflow-wrap:anywhere}
+.vc-price{margin:6px 0 0;font-weight:800;white-space:nowrap;text-align:left}
 .vc-callbar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--soft);border-bottom:1px solid var(--line)}
 .vc-callbar span{font-size:.86rem;color:var(--muted);font-weight:600}
 .vc-call{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:7px;border:0;background:var(--green);color:#ffffff;border-radius:10px;padding:10px 16px;font-weight:700;font-size:.9rem;text-decoration:none;white-space:nowrap}
 .vc-call:hover{opacity:.9}
-.vc-conv .chat-log{height:min(52vh,460px);min-height:260px;border-radius:0;margin:0;background:var(--soft)}
+.vc-conv .chat-log{height:min(60vh,560px);min-height:300px;border-radius:0;margin:0;background:var(--soft)}
 .vc-send{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--surface);align-items:center}
 .vc-send input{flex:1}
 .vc-send .btn{width:auto;margin:0}
@@ -268,44 +284,12 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
     <div class="wrap">
       <div style="max-width:640px">
         <h1>La voiture qu’il vous faut, avec un vendeur vérifié.</h1>
-        <p class="lead">IVOIRE CARS vous met en relation avec des concessionnaires et des agences de location. Dites-nous ce que vous cherchez, nous vous rappelons très vite.</p>
+        <p class="lead">IVOIRE CARS travaille avec des agences de location et des concessionnaires. Dites-nous ce que vous cherchez, nous vous rappelons très vite.</p>
         <div class="pills"><span>Vendeurs vérifiés</span><span>Réponse rapide</span><span>Service gratuit</span></div>
       </div>
     </div>
   </section>
 
-  <section id="chercher">
-    <div class="wrap split">
-      <div>
-        <h2>Dites-nous ce que vous cherchez</h2>
-        <p style="color:var(--muted)">Que vous vouliez louer ou acheter, décrivez votre besoin : nous cherchons les meilleures offres chez nos partenaires et nous vous recontactons rapidement.</p>
-      </div>
-      <form class="card" id="search">
-        <label for="sname">Votre nom</label>
-        <input id="sname" type="text" placeholder="Ex. Kouassi" required>
-        <label for="sphone">Votre numéro personnel</label>
-        <input id="sphone" type="tel" placeholder="Ex. 07 00 00 00 00" required>
-        <label for="swhats">Votre numéro WhatsApp (pour vous recontacter)</label>
-        <input id="swhats" type="tel" placeholder="Ex. 07 00 00 00 00" required>
-        <label for="semail">Votre email (Gmail)</label>
-        <input id="semail" type="email" placeholder="Ex. kouassi@gmail.com" required>
-        <label for="smode">Vous voulez</label>
-        <select id="smode"><option>Louer</option><option>Acheter</option></select>
-        <label for="sbudget">Votre budget</label>
-        <input id="sbudget" type="text" placeholder="Ex. 25 000 FCFA par jour, ou 6 000 000 FCFA" required>
-        <label>Photos du véhicule recherché (4 photos)</label>
-        <div class="ph-grid">
-          <label class="ph-tile"><span>Photo 1</span><input class="sfile" type="file" accept="image/*" data-i="0"><img id="simg0" alt="" hidden></label>
-          <label class="ph-tile"><span>Photo 2</span><input class="sfile" type="file" accept="image/*" data-i="1"><img id="simg1" alt="" hidden></label>
-          <label class="ph-tile"><span>Photo 3</span><input class="sfile" type="file" accept="image/*" data-i="2"><img id="simg2" alt="" hidden></label>
-          <label class="ph-tile"><span>Photo 4</span><input class="sfile" type="file" accept="image/*" data-i="3"><img id="simg3" alt="" hidden></label>
-        </div>
-        <label for="scity">Ville</label>
-        <input id="scity" type="text" placeholder="Ex. Cocody, Abidjan" required>
-        <button class="btn btn-green" type="submit">Envoyer ma demande</button>
-      </form>
-    </div>
-  </section>
 
   <section>
     <div class="wrap">
@@ -370,6 +354,38 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
       </form>
     </div>
     <div id="hero-auth" class="wrap" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line);text-align:center"></div>
+  </section>
+  <section id="chercher">
+    <div class="wrap split">
+      <div>
+        <h2>Dites-nous ce que vous cherchez</h2>
+        <p style="color:var(--muted)">Que vous vouliez louer ou acheter, décrivez votre besoin : nous cherchons les meilleures offres chez nos partenaires et nous vous recontactons rapidement.</p>
+      </div>
+      <form class="card" id="search">
+        <label for="sname">Votre nom</label>
+        <input id="sname" type="text" placeholder="Ex. Kouassi" required>
+        <label for="sphone">Votre numéro personnel</label>
+        <input id="sphone" type="tel" placeholder="Ex. 07 00 00 00 00" required>
+        <label for="swhats">Votre numéro WhatsApp (pour vous recontacter)</label>
+        <input id="swhats" type="tel" placeholder="Ex. 07 00 00 00 00" required>
+        <label for="semail">Votre email (Gmail)</label>
+        <input id="semail" type="email" placeholder="Ex. kouassi@gmail.com" required>
+        <label for="smode">Vous voulez</label>
+        <select id="smode"><option>Louer</option><option>Acheter</option></select>
+        <label for="sbudget">Votre budget</label>
+        <input id="sbudget" type="text" placeholder="Ex. 25 000 FCFA par jour, ou 6 000 000 FCFA" required>
+        <label>Photos du véhicule recherché (4 photos)</label>
+        <div class="ph-grid">
+          <label class="ph-tile"><span>Photo 1</span><input class="sfile" type="file" accept="image/*" data-i="0"><img id="simg0" alt="" hidden></label>
+          <label class="ph-tile"><span>Photo 2</span><input class="sfile" type="file" accept="image/*" data-i="1"><img id="simg1" alt="" hidden></label>
+          <label class="ph-tile"><span>Photo 3</span><input class="sfile" type="file" accept="image/*" data-i="2"><img id="simg2" alt="" hidden></label>
+          <label class="ph-tile"><span>Photo 4</span><input class="sfile" type="file" accept="image/*" data-i="3"><img id="simg3" alt="" hidden></label>
+        </div>
+        <label for="scity">Ville</label>
+        <input id="scity" type="text" placeholder="Ex. Cocody, Abidjan" required>
+        <button class="btn btn-green" type="submit">Envoyer ma demande</button>
+      </form>
+    </div>
   </section>
     <section id="reserver">
       <div class="wrap split">
@@ -589,6 +605,7 @@ function shrink(file){
 /* Catalogue */
 var list = document.getElementById("cars");
 var curF = "tout", allCars = CARS;
+var PAGE = 8, showN = PAGE; /* 8 publications au départ, puis « Voir plus » */
 /* Photos d’une annonce : touchez la photo pour voir la suivante (compteur en bas à droite) */
 function carTopParts(c, badge){
   var imgs = c.i || [], idx = 0;
@@ -611,7 +628,7 @@ function render(f){
   curF = f; list.innerHTML = "";
   var shown = allCars.filter(function(c){ return f === "tout" || c.m === f; });
   if (!shown.length) list.appendChild(h("p", {class:"note"}, ["Aucune voiture pour l’instant."]));
-  shown.forEach(function(c){
+  shown.slice(0, showN).forEach(function(c){
     var b = h("span", {class:"badge" + (c.m === "acheter" ? " v" : "")}, [c.m === "louer" ? "À louer" : "À vendre"]);
     var btn = h("button", {type:"button", class:"btn btn-green btn-small", onclick:function(){ discuss(c); }}, ["Discuter de ce véhicule"]);
     // Photo de l’agence masquée sur les publications (visible uniquement dans l’admin)
@@ -621,16 +638,31 @@ function render(f){
       h("div", {class:"body"}, [h("h3", {}, [c.n]), h("p", {class:"meta"}, [c.d]), agencyRow, h("p", {style:"font-weight:700"}, [c.p]), btn].filter(Boolean))
     ]));
   });
+  if (shown.length > showN || showN > PAGE) {
+    var bar = h("div", {style:"grid-column:1/-1;display:flex;gap:10px"}, []);
+    if (showN > PAGE) {
+      var less = h("button", {type:"button", class:"btn btn-orange", style:"flex:1"}, ["Voir moins"]);
+      less.addEventListener("click", function(){ showN = Math.max(PAGE, showN - PAGE); render(curF); });
+      bar.append(less);
+    }
+    if (shown.length > showN) {
+      var more = h("button", {type:"button", class:"btn btn-green", style:"flex:1"}, ["Voir plus"]);
+      more.addEventListener("click", function(){ showN += PAGE; render(curF); });
+      bar.append(more);
+    }
+    list.appendChild(bar);
+  }
 }
 var chips = document.querySelectorAll(".chip");
 chips.forEach(function(c){
   c.addEventListener("click", function(){
     chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+    showN = PAGE;
     render(c.dataset.f);
   });
 });
 list.textContent = "Chargement…";
-fetch(SB_URL + "/rest/v1/cars?select=*&available=eq.true&order=created_at.desc", {headers:{apikey:SB_KEY}})
+fetch(SB_URL + "/rest/v1/cars?select=*&available=eq.true&approved=eq.true&order=created_at.desc", {headers:{apikey:SB_KEY}})
   .then(function(r){ if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(function(rows){ allCars = rows.map(function(r){ return {n:r.name, m:r.mode, d:r.details || "", p:r.price || "Prix sur demande", i:r.images || [], a:r.agency_name || "", ap:r.agency_photo || "", aph:r.agency_phone || "", id:r.id}; }); })
   .catch(function(){ allCars = CARS; })
@@ -797,16 +829,16 @@ function clAuthUI(box){
         if (!x.ok) return done("Création impossible : " + (x.j.msg || x.j.error_description || x.j.message || "erreur"));
         if (!x.j.access_token) return done("Compte créé. Confirmez votre email, puis connectez-vous.");
         agSave(agTok(x.j));
-        return agApi("POST", "client_accounts", {name:val("cname"), phone:val("cphone")}).then(function(){ CL.acc = undefined; clDraw(); });
+        return agApi("POST", "client_accounts", {name:val("cname"), phone:val("cphone")}).then(function(){ CL.acc = undefined; location.hash = ""; route(); window.scrollTo(0, 0); });
       }).catch(function(e){ done("Erreur : " + ((e && e.detail) || "réessayez.")); });
     }
   });
-  box.append(f);
+  box.append(h("div", {class:"auth-card"}, [h("h2", {}, [login ? "Connexion" : "Créer un compte"]), h("p", {class:"note"}, ["Pour discuter de votre demande avec le service client."]), f]));
 }
 setInterval(function(){ if (document.body.classList.contains("discussion")) clPoll(); }, 6000);
 function discuss(c){
   track("discuss", c.n);
-  if (c.id) { VC.car = {id:c.id, name:c.n, agency:c.a, phone:c.aph, price:c.p, img:c.i && c.i[0] || ""}; location.hash = "#vehicule"; }
+  if (c.id) { VC.car = {id:c.id, name:c.n, agency:c.a, phone:c.aph, price:c.p, img:c.i && c.i[0] || "", imgs:c.i || [], details:c.d || ""}; location.hash = "#vehicule"; }
   else location.hash = "#discussion";
 }
 
@@ -884,7 +916,7 @@ function agAuthUI(box){
       agSave(agTok(x.j)); AG.acc = undefined; agDraw();
     }).catch(function(){ done("Connexion impossible. Vérifiez internet."); });
   });
-  box.append(f, h("p", {class:"note", style:"margin-top:14px"}, ["Pas encore de compte agence ? Contactez IVOIRE CARS au 07 57 33 40 80 pour être enregistré."]));
+  box.append(h("div", {class:"auth-card"}, [h("h2", {}, ["Espace agence"]), h("p", {class:"note"}, ["Connectez-vous pour gérer vos véhicules et vos publications."]), f, h("p", {class:"note", style:"margin-top:14px"}, ["Pas encore de compte agence ? Contactez IVOIRE CARS au 07 57 33 40 80 pour être enregistré."])]));
 }
 /* Une case de photo réutilisable : clic pour choisir, aperçu, bouton × pour retirer avant d’enregistrer */
 function phTile(onChange, label){
@@ -926,6 +958,7 @@ function carPhotoManager(c){
       body.append(h("div", {class:"ph-grid"}, imgs.map(function(u, idx){
         var delBtn = h("button", {type:"button", class:"ph-x", "aria-label":"Supprimer cette photo"}, ["×"]);
         delBtn.addEventListener("click", function(){
+          if (imgs.length <= 4) { agNote(body, "Une publication doit toujours avoir 4 photos. Pour changer une photo, supprimez la voiture et publiez-la à nouveau."); return; }
           if (delBtn.dataset.sure !== "1") { delBtn.dataset.sure = "1"; delBtn.textContent = "✓"; delBtn.style.background = "#b3261e"; return; }
           var next = imgs.slice(); next.splice(idx, 1);
           delBtn.disabled = true;
@@ -998,6 +1031,7 @@ function agDash(box){
     var carsGrid = h("div", {class:"ag-cars"}, []);
     AG.cars.forEach(function(c){
       var price = h("input", {type:"text", value:c.price || "", "aria-label":"Prix"});
+      var waiting = c.approved === false ? h("p", {class:"note", style:"color:#b3261e;font-weight:700;margin:0 0 6px"}, ["En attente de validation par IVOIRE CARS avant publication"]) : "";
       var save = h("button", {type:"button", class:"btn btn-ghost btn-small", onclick:function(){
         agApi("PATCH", "cars?id=eq." + c.id, {price:price.value.trim()}).then(function(){ save.textContent = "Prix enregistré"; }).catch(function(){ save.textContent = "Erreur"; }); }}, ["Enregistrer le prix"]);
       var sel = h("select", {"aria-label":"Disponibilité", onchange:function(){
@@ -1009,6 +1043,7 @@ function agDash(box){
       carsGrid.append(h("div", {class:"ag-car-card"}, [
         (c.images && c.images[0]) ? h("img", {src:c.images[0], alt:c.name}) : h("div", {class:"ph-ph"}),
         h("b", {}, [c.name]), h("div", {class:"note"}, [c.mode === "acheter" ? "Vente" : "Location"]),
+        waiting,
         price,
         h("div", {class:"ag-car-actions"}, [save, sel, del]),
         carPhotoManager(c)
@@ -1160,6 +1195,16 @@ function vcCar(id){ for (var i = 0; i < allCars.length; i++) if (allCars[i].id =
 function vcThumb(img){
   return img ? h("img", {class:"vc-thumb", src:img, alt:"", loading:"lazy"}) : h("div", {class:"vc-thumb"}, []);
 }
+/* Toutes les photos publiées de la voiture, visibles avant la discussion */
+function vcGallery(imgs){
+  if (!imgs || !imgs.length) return "";
+  return h("div", {class:"vc-gallery", style:"margin:8px 0 4px"}, [
+    h("p", {class:"note", style:"margin:0 0 6px"}, ["Photos du véhicule (" + imgs.length + ")"]),
+    h("div", {style:"display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch"},
+      imgs.map(function(src){
+        return h("img", {src:src, alt:"", loading:"lazy", style:"flex:0 0 70%;max-width:260px;height:150px;object-fit:contain;background:transparent;border-radius:12px;scroll-snap-align:start"});
+      }))]);
+}
 function vcList(box){
   box.append(h("p", {class:"note"}, ["Chargement…"]));
   agApi("GET", "car_messages?select=car_id,car_name,body,sender,created_at&client_id=eq." + agUid() + "&order=created_at.desc&limit=300").then(function(rows){
@@ -1177,7 +1222,7 @@ function vcList(box){
       var car = vcCar(r.car_id);
       var tag = r.sender === "agency" || r.sender === "admin" ? h("span", {class:"vc-tag"}, ["Réponse"]) : "";
       box.append(h("button", {type:"button", class:"vc-item", onclick:function(){
-        VC.car = {id:r.car_id, name:r.car_name || (car && car.n) || "Véhicule", agency:car ? car.a : "", phone:car ? car.aph : "", price:car ? car.p : "", img:car && car.i && car.i[0] || ""}; vcDraw(); }}, [
+        VC.car = {id:r.car_id, name:r.car_name || (car && car.n) || "Véhicule", agency:car ? car.a : "", phone:car ? car.aph : "", price:car ? car.p : "", img:car && car.i && car.i[0] || "", imgs:car && car.i || [], details:car ? car.d || "" : ""}; vcDraw(); }}, [
         vcThumb(car && car.i && car.i[0]),
         h("div", {class:"vc-info"}, [h("b", {}, [r.car_name || "Véhicule"]),
           h("div", {class:"vc-prev"}, [(r.sender === "client" ? "Vous : " : "") + r.body])]),
@@ -1244,12 +1289,12 @@ function vcDraw(){
     h("div", {class:"vc-top"}, [
       h("button", {type:"button", class:"vc-back", "aria-label":"Retour aux discussions", onclick:function(){ VC.car = null; vcDraw(); }}, ["←"]),
       vcThumb(VC.car.img),
-      h("div", {class:"vc-info"}, [h("b", {}, [VC.car.name])]),
-      price ? h("div", {class:"vc-price"}, [price]) : ""]),
+      h("div", {class:"vc-info"}, [h("b", {}, [VC.car.name]), VC.car.details ? h("p", {class:"note", style:"margin:4px 0 0"}, [VC.car.details]) : "", price ? h("div", {class:"vc-price"}, [price]) : ""]),
+    ]),
     h("div", {class:"vc-callbar"}, [
       h("span", {}, ["Besoin d’une réponse rapide ?"]),
       h("a", {class:"vc-call", href:"tel:" + (VC.car.phone ? "+225" + String(VC.car.phone).replace(/[^\d]/g, "").replace(/^0/, "") : "+" + PHONE), "aria-label":"Appeler l’agence"}, ["📞 Appeler l’agence"])]),
-    h("div", {id:"vchat-log", class:"chat-log"}), preview, f]));
+    vcGallery(VC.car.imgs || []), h("div", {id:"vchat-log", class:"chat-log"}), preview, f]));
   vcPoll();
 }
 
