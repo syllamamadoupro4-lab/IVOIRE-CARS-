@@ -19,6 +19,9 @@
   color-scheme:light;
 }
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+/* Photo de couverture : affichée seulement une fois la bonne photo chargée */
+.hero-photo{opacity:0;transition:opacity .4s}
+.hero-photo.ready{opacity:1}
 /* Pas de zoom au double toucher sur les publications, boutons et liens (téléphone) */
 html,body,a,button,label,input,select,textarea,.car,.car *,.card,.card *{touch-action:manipulation}
 *,*::before,*::after{box-sizing:inherit}
@@ -353,7 +356,6 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
         <button class="btn btn-green" type="submit">Proposer ma voiture</button>
       </form>
     </div>
-    <div id="hero-auth" class="wrap" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line);text-align:center"></div>
   </section>
   <section id="chercher">
     <div class="wrap split">
@@ -386,6 +388,7 @@ textarea{width:100%;min-height:90px;padding:13px;border:1px solid var(--line);bo
         <button class="btn btn-green" type="submit">Envoyer ma demande</button>
       </form>
     </div>
+    <div id="hero-auth" class="wrap" style="margin-top:28px;padding-top:20px;border-top:1px solid var(--line);text-align:center"></div>
   </section>
     <section id="reserver">
       <div class="wrap split">
@@ -675,8 +678,10 @@ fetch(SB_URL + "/rest/v1/site_settings?select=hero_photo&id=eq.1&limit=1", {head
     var u = rows && rows[0] && rows[0].hero_photo;
     var im = document.querySelector(".hero-photo");
     if (u && im) im.src = u;
+    if (im) im.classList.add("ready");
   })
-  .catch(function(){});
+  .catch(function(){ var im = document.querySelector(".hero-photo"); if (im) im.classList.add("ready"); });
+setTimeout(function(){ var im = document.querySelector(".hero-photo"); if (im) im.classList.add("ready"); }, 4000);
 
 /* Discussion avec les administrateurs (compte client obligatoire) */
 function chatLog(rows, id, mine){
@@ -822,7 +827,7 @@ function clAuthUI(box){
     if (login) {
       agAuth("token?grant_type=password", {email:val("cmail"), password:pass}).then(function(x){
         if (!x.ok) return done("Connexion refusée : " + (x.j.msg || x.j.error_description || x.j.message || "erreur"));
-        agSave(agTok(x.j)); CL.acc = undefined; clDraw();
+        agSave(agTok(x.j)); CL.acc = undefined; location.hash = ""; route(); window.scrollTo(0, 0);
       }).catch(function(){ done("Connexion impossible. Vérifiez internet."); });
     } else {
       agAuth("signup", {email:val("cmail"), password:pass}).then(function(x){
