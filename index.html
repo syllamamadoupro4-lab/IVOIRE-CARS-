@@ -79,9 +79,22 @@ form .btn{width:100%;margin-top:18px}
 .chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;cursor:pointer}
 .chip[aria-pressed="true"]{background:var(--green);color:#ffffff;border-color:var(--green)}
 .grid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+#cars.lignes{display:block}
+.ligne{display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;padding:4px 2px 14px;margin:0 0 6px;scrollbar-width:thin}
+.ligne .car{flex:0 0 74%;max-width:300px;scroll-snap-align:start}
+@media (min-width:700px){.ligne .car{flex:0 0 280px}}
+.ligne-titre{font-size:13px;font-weight:700;color:#111;margin:14px 0 6px}
 #cars .car .body{padding:10px 11px 12px}
-#cars .car h3{font-size:.98rem;line-height:1.25}
-#cars .car .meta{font-size:.88rem}
+.ligne .car{display:flex;flex-direction:column}
+.ligne .car .body{flex:1;display:flex;flex-direction:column;gap:4px;padding:10px 11px 12px}
+.ligne .car h3{font-size:.98rem;line-height:1.25;min-height:2.5em}
+.ligne .car .meta{font-size:.88rem;min-height:3em}
+.ligne .car .body > p:last-of-type{min-height:2.6em;margin-bottom:12px}
+.ligne .car .body > .btn{margin-top:auto}
+#cars .car h3{font-size:.98rem;line-height:1.25;min-height:2.5em}
+#cars .car .meta{font-size:.88rem;min-height:3em}
+#cars .car .body > p:last-of-type{min-height:2.6em;margin-bottom:12px}
+#cars .car .body > .btn{margin-top:auto}
 #cars .car .btn{font-size:.9rem;padding:10px 12px}
 .car{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s ease,box-shadow .15s ease}
 .car:hover{border-color:var(--orange);box-shadow:0 10px 24px rgba(0,0,0,.4)}
@@ -609,7 +622,7 @@ function shrink(file){
 /* Catalogue */
 var list = document.getElementById("cars");
 var curF = "tout", allCars = CARS;
-var PAGE = 8, showN = PAGE; /* 8 publications au départ, puis « Voir plus » */
+
 /* Photos d’une annonce : touchez la photo pour voir la suivante (compteur en bas à droite) */
 function carTopParts(c, badge){
   var imgs = c.i || [], idx = 0;
@@ -628,47 +641,59 @@ function carTopParts(c, badge){
   next.addEventListener("click", function(e){ e.stopPropagation(); show(idx + 1); });
   return imgs.length > 1 ? [img, badge, counter, prev, next] : [img, badge];
 }
-function render(f){
-  curF = f; list.innerHTML = "";
+var LIGNE_TAILLE = 30, LIGNES_PAR_PAGE = 10, nLignes = 1;
+function filtreLignes(f){
   var q = (document.getElementById("carsearch") ? document.getElementById("carsearch").value : "").trim().toLowerCase();
   var shown = allCars.filter(function(c){
     if (f !== "tout" && c.m !== f) return false;
     if (!q) return true;
     return [c.n, c.p].join(" ").toLowerCase().indexOf(q) !== -1;
   });
-  if (!shown.length) list.appendChild(h("p", {class:"note"}, ["Aucune voiture pour l’instant."]));
-  shown.slice(0, showN).forEach(function(c){
+  var lignes = [];
+  for (var k = 0; k < shown.length; k += LIGNE_TAILLE) lignes.push(shown.slice(k, k + LIGNE_TAILLE));
+  return lignes;
+}
+function ligneDOM(group, n){
+  var frag = document.createDocumentFragment();
+  var rangee = h("div", {class:"ligne"}, []);
+  group.forEach(function(c){
     var b = h("span", {class:"badge" + (c.m === "acheter" ? " v" : "")}, [c.m === "louer" ? "À louer" : "À vendre"]);
     var btn = h("button", {type:"button", class:"btn btn-green btn-small", onclick:function(){ discuss(c); }}, ["Discuter de ce véhicule"]);
-    // Photo de l’agence masquée sur les publications (visible uniquement dans l’admin)
-    var agencyRow = null;
-    list.appendChild(h("article", {class:"car"}, [
+    rangee.appendChild(h("article", {class:"car"}, [
       h("div", {class:"top" + (c.i && c.i.length ? " has-img" : ""), style:"position:relative"}, (c.i && c.i.length ? carTopParts(c, b) : [b])),
-      h("div", {class:"body"}, [h("h3", {}, [c.n]), h("p", {class:"meta"}, [c.d]), agencyRow, h("p", {style:"font-weight:700"}, [c.p]), btn].filter(Boolean))
+      h("div", {class:"body"}, [h("h3", {}, [c.n]), h("p", {class:"meta"}, [c.d]), h("p", {style:"font-weight:700"}, [c.p]), btn])
     ]));
   });
-  if (shown.length > showN || showN > PAGE) {
-    var bar = h("div", {style:"grid-column:1/-1;display:flex;gap:10px"}, []);
-    if (showN > PAGE) {
-      var less = h("button", {type:"button", class:"btn btn-orange", style:"flex:1"}, ["Voir moins"]);
-      less.addEventListener("click", function(){ showN = Math.max(PAGE, showN - PAGE); render(curF); });
-      bar.append(less);
-    }
-    if (shown.length > showN) {
-      var more = h("button", {type:"button", class:"btn btn-green", style:"flex:1"}, ["Voir plus"]);
-      more.addEventListener("click", function(){ showN += PAGE; render(curF); });
-      bar.append(more);
-    }
-    list.appendChild(bar);
-  }
+  frag.appendChild(rangee);
+  return frag;
+}
+var moreBtn = null;
+function render(f){
+  curF = f; list.innerHTML = ""; list.className = "lignes";
+  var lignes = filtreLignes(f);
+  if (!lignes.length) { list.appendChild(h("p", {class:"note"}, ["Aucune voiture pour l’instant."])); return; }
+  lignes.slice(0, nLignes).forEach(function(group, n){ list.appendChild(ligneDOM(group, n)); });
+  if (lignes.length > nLignes) list.appendChild(moreBtn = makeMore());
+}
+function makeMore(){
+  var more = h("button", {type:"button", class:"btn btn-green", style:"width:100%;margin-top:6px"}, ["Voir plus"]);
+  more.addEventListener("click", function(){
+    var y = window.scrollY, lignes = filtreLignes(curF), idx = nLignes;
+    nLignes += 1;
+    more.remove();
+    if (idx < lignes.length) list.appendChild(ligneDOM(lignes[idx], idx));
+    if (nLignes < lignes.length) list.appendChild(makeMore());
+    window.scrollTo(0, y);
+  });
+  return more;
 }
 var carSearch = document.getElementById("carsearch");
-if (carSearch) carSearch.addEventListener("input", function(){ showN = PAGE; render(curF); });
+if (carSearch) carSearch.addEventListener("input", function(){ nLignes = 1; render(curF); });
 var chips = document.querySelectorAll(".chip");
 chips.forEach(function(c){
   c.addEventListener("click", function(){
     chips.forEach(function(x){ x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
-    showN = PAGE;
+    nLignes = 1;
     render(c.dataset.f);
   });
 });
