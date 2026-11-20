@@ -1103,7 +1103,7 @@ function agDash(box){
 }
 
 /* Écran d’entrée : compte obligatoire pour accéder au site */
-var GT = {mode:"login"};
+var GT = {mode: location.hash === "#inscription" ? "signup" : "login"}; /* lien #inscription : ouvre directement « Créer un compte » */
 function gateCheck(){
   if (!AG.s) return Promise.resolve(false);
   if (AG.s.exp - Date.now() > 60000) return Promise.resolve(true);
@@ -1351,6 +1351,7 @@ setInterval(function(){
 /* Navigation : accueil / espace agences */
 function route(){
   var hh = location.hash;
+  if (hh === "#inscription") { GT.mode = "signup"; if (document.body.classList.contains("gate")) gateDraw(); }
   var special = hh === "#agences" || hh === "#aide" || hh === "#help-form" || hh === "#reserver" || hh === "#discussion" || hh === "#vehicule";
   document.body.classList.toggle("agences", hh === "#agences");
   document.body.classList.toggle("aide", hh === "#aide" || hh === "#help-form");
