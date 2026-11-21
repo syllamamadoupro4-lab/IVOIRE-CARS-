@@ -754,7 +754,7 @@ function clTopic(){
   clSend(t).catch(function(){ CL.topic = t; });
 }
 function clLoad(){
-  agApi("GET", "client_accounts?select=*").then(function(r){ CL.acc = r[0] || null; clDraw(); })
+  agApi("GET", "client_accounts?select=*&user_id=eq." + agUid()).then(function(r){ CL.acc = r[0] || null; clDraw(); })
     .catch(function(e){
       if (e && e.message === "session") agOut();
       else { var b = document.getElementById("dspace"); if (b) agNote(b, "Chargement impossible. Réessayez."); }
@@ -921,7 +921,7 @@ function agApi(method, path, body){
 function agNote(box, t){ var b = h("p", {class:"msg-ok", role:"alert"}, [t]); box.append(b); try { b.scrollIntoView({behavior:"smooth", block:"center"}); } catch (e) {} setTimeout(function(){ b.remove(); }, 8000); }
 function agOut(){ agSave(null); AG.acc = undefined; AG.cars = []; CL.acc = undefined; route(); window.scrollTo(0, 0); }
 function agLoad(){
-  Promise.all([agApi("GET", "agency_accounts?select=*"), agApi("GET", "cars?select=*&order=created_at.desc")])
+  Promise.all([agApi("GET", "agency_accounts?select=*&user_id=eq." + agUid()), agApi("GET", "cars?select=*&order=created_at.desc")])
     .then(function(r){ AG.acc = r[0][0] || null; AG.cars = r[1]; agDraw(); })
     .catch(function(e){
       if (e && e.message === "session") agOut();
